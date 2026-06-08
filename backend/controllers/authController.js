@@ -209,18 +209,22 @@ export const sendEmailOtp = async (req, res) => {
     // Send email using Nodemailer if SMTP details are configured
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
-        console.log(`[EMAIL OTP] Setting up Nodemailer transport for user: ${process.env.EMAIL_USER}`);
+        const port = parseInt(process.env.EMAIL_PORT || '587');
+        const isSecure = port === 465;
+        console.log(`[EMAIL OTP] Setting up Nodemailer transport for user: ${process.env.EMAIL_USER} on port ${port} (secure: ${isSecure})`);
         const activeTransporter = nodemailer.createTransport({
           host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-          port: parseInt(process.env.EMAIL_PORT || '587'),
-          secure: false, 
+          port: port,
+          secure: isSecure, 
           auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
           },
           tls: {
             rejectUnauthorized: false
-          }
+          },
+          connectionTimeout: 5000,
+          socketTimeout: 5000
         });
 
         const mailOptions = {
