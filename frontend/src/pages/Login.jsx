@@ -88,7 +88,7 @@ const Login = () => {
       const response = await axios.post('/api/auth/firebase', {
         firebaseToken: idToken,
         class: selectedClass
-      }, { timeout: 10000 });
+      }, { timeout: 40000 });
       
       console.log("[Firebase Auth Sync] Received response:", response.data);
       if (response.data.success) {
@@ -130,7 +130,7 @@ const Login = () => {
     dispatch(authStart());
     
     try {
-      const response = await axios.post('/api/auth/send-otp', { email }, { timeout: 10000 });
+      const response = await axios.post('/api/auth/send-otp', { email }, { timeout: 40000 });
       console.log("[Email OTP Send] Server response:", response.data);
       if (response.data.success) {
         setShowEmailOtpField(true);
@@ -173,7 +173,7 @@ const Login = () => {
         email,
         otp: emailOtp,
         className: selectedClass
-      }, { timeout: 10000 });
+      }, { timeout: 40000 });
       
       console.log("[Email OTP Verify] Server response:", response.data);
       if (response.data.success) {
